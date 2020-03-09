@@ -178,7 +178,6 @@ export class HueRegisterComponent {
   }
 
   copyToClipboard(el: HTMLTextAreaElement) {
-    debugger;
     el.select();
     document.execCommand("copy");
     this.copyAction = "Copied!";
