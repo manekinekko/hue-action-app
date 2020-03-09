@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   api: {
-    authUrl: "http://localhost:7071/api/authUrl"
+    authUrl: "https://api.hueaction.dev/auth",
+    registerUrl: "https://api.hueaction.dev/register",
+    revokeUrl: "https://api.hueaction.dev/revoke"
   }
 };

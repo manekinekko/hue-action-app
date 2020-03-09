@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   api: {
-    authUrl: "http://localhost:7071/api/authUrl"
+    authUrl: "http://localhost:7071/api/auth",
+    registerUrl: "http://localhost:7071/api/register",
+    revokeUrl: "http://localhost:7071/api/revoke"
   }
 };
 
