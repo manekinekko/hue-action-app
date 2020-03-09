@@ -144,9 +144,9 @@ export class HueAppInfoComponent {
   clientSecretInputType: "text" | "password" = "password";
   clientSecretInputIcon: "visibility" | "visibility_off" = "visibility";
   appInfoForm = this.fb.group({
-    clientId: ["pmezi2dN8wTF0AtsCAA3Wzz3fbb6Yb2h", Validators.required],
-    clientSecret: ["HRrx12yItLmoHcG1", Validators.required],
-    appId: ["hueaction", Validators.required]
+    clientId: [null, Validators.required],
+    clientSecret: [null, Validators.required],
+    appId: [null, Validators.required]
   });
 
   constructor(private readonly fb: FormBuilder) {}
