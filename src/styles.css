@@ -1,4 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url(/assets/tiles-cubes.png);
+  animation: color-cycle 44s linear infinite;
+}
+
+@keyframes color-cycle {
+  0% {
+    background-position: 32% 0%;
+  }
+  100% {
+    background-position: 69% 100%;
+  }
+}
