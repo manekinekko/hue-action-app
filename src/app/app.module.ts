@@ -11,10 +11,15 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ReactiveFormsModule } from "@angular/forms";
 
+import { HueRegisterComponent } from "./hue-register/hue-register.component";
+
 @NgModule({
-  declarations: [AppComponent, HueAppInfoComponent],
+  declarations: [AppComponent, HueAppInfoComponent, HueRegisterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -25,6 +30,9 @@ import { ReactiveFormsModule } from "@angular/forms";
     MatRadioModule,
     MatCardModule,
     MatIconModule,
+    MatToolbarModule,
+    MatDividerModule,
+    MatProgressBarModule,
     ReactiveFormsModule
   ],
   providers: [],
