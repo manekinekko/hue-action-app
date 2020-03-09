@@ -15,11 +15,8 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ReactiveFormsModule } from "@angular/forms";
-
-import { HueRegisterComponent } from "./hue-register/hue-register.component";
-
 @NgModule({
-  declarations: [AppComponent, HueAppInfoComponent, HueRegisterComponent],
+  declarations: [AppComponent, HueAppInfoComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -1,186 +1,211 @@
 import { Component } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "src/environments/environment";
+import { trigger, transition, style, animate } from "@angular/animations";
 
 @Component({
   selector: "hue-app-info",
   template: `
-    <form [formGroup]="appInfoForm" novalidate>
-      <mat-card class="mat-elevation-z8">
-        <mat-card-header>
-          <h1>HUE App ⇌ Github Action</h1>
-        </mat-card-header>
-        <mat-divider></mat-divider>
+    <mat-card class="mat-elevation-z8">
+      <div>
+        <img src="/assets/philipsHue.png" />
         <mat-progress-bar
-          [hidden]="!loading"
-          mode="indeterminate"
+          [mode]="progressBarMode"
+          [color]="progressBarColor"
         ></mat-progress-bar>
-        <mat-card-content>
-          <p>
-            Enter your Philips HUE Remote app information (<a
-              href="https://developers.meethue.com/my-apps/"
-              target="__blank"
-              >create one</a
-            >).
-          </p>
-
-          <div class="row">
-            <mat-form-field class="full-width">
-              <input
-                matInput
-                placeholder="AppId"
-                formControlName="appId"
-                autocomplete="off"
-              />
-              <mat-error
-                *ngIf="appInfoForm.controls['appId'].hasError('required')"
-              >
-                AppId is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-form-field class="full-width">
-              <input
-                matInput
-                placeholder="Client ID"
-                formControlName="clientId"
-                autocomplete="off"
-              />
-              <mat-error
-                *ngIf="appInfoForm.controls['clientId'].hasError('required')"
-              >
-                Client ID is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <mat-form-field class="full-width">
-              <input
-                matInput
-                placeholder="Client Secret"
-                formControlName="clientSecret"
-                autocomplete="off"
-                [type]="clientSecretInputType"
-              />
-              <mat-icon
-                matSuffix
-                (click)="toggleSecret()"
-                class="toggle-client-secret"
-                >{{ clientSecretInputIcon }}</mat-icon
-              >
-              <mat-error
-                *ngIf="
-                  appInfoForm.controls['clientSecret'].hasError('required')
-                "
-              >
-                Client Secret is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </mat-card-content>
-        <mat-divider></mat-divider>
-
-        <mat-card-actions>
-          <button
-            mat-raised-button
-            color="secondary"
-            type="submit"
-            (click)="generateAuthUrl()"
-            [disabled]="appInfoForm.invalid || authUrl"
-          >
-            Generate Auth URL
-          </button>
+        <button
+          *ngIf="!actionSnippet"
+          mat-stroked-button
+          color="primary"
+          (click)="authorize()"
+        >
+          Authorize <mat-icon>lock_open</mat-icon>
+        </button>
+        <button
+          *ngIf="actionSnippet"
+          mat-stroked-button
+          color="accent"
+          (click)="revoke()"
+        >
+          Revoke <mat-icon>lock</mat-icon>
+        </button>
+        <img src="/assets/github-actions.png" />
+      </div>
+      <div *ngIf="actionSnippet" [@inOutAnimation]>
+        <br />
+        <br />
+        <h2>You are almost done!</h2>
+        <p>
+          1. Create a
           <a
-            mat-raised-button
-            color="primary"
-            [disabled]="!authUrl"
-            [href]="authUrl"
+            target="__blank"
+            href="https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets"
+            >GitHub secret</a
           >
-            Authorize
-          </a>
-        </mat-card-actions>
-      </mat-card>
-    </form>
+          called <kbd>HUEACTION_WEBHOOK</kbd> with:
+        </p>
+        <pre><mat-icon class="copy-to-clipboard" (click)="copyToClipboard(webhookClipboard)"
+          >filter_none</mat-icon
+        ><code>{{ webhook }}</code></pre>
+        <p>
+          2. Add this HUE Action snippet as part of your Github workflow:
+        </p>
+        <pre>
+        <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard)"
+          >filter_none</mat-icon
+        ><code>{{actionSnippet}}</code></pre>
+      </div>
+    </mat-card>
+    <textarea #webhookClipboard [value]="webhook" class="clipboard"></textarea>
+    <textarea
+      #actionSnippetClipboard
+      [value]="actionSnippet"
+      class="clipboard"
+    ></textarea>
   `,
   styles: [
     `
-      [hidden] {
-        visibility: hidden;
+      img {
+        width: 60px;
+        margin: 0px;
       }
-      form {
-        margin: 20px;
+      img:last-child {
+        left: -10px;
+        position: relative;
       }
-      .full-width {
-        width: 100%;
+      mat-progress-bar {
+        width: 300px;
+        top: 32px;
       }
-      mat-card-header {
-        justify-content: center;
-      }
-      mat-card-content {
-        padding: 20px;
-      }
-      mat-card-actions {
+      mat-card {
         display: flex;
-        justify-content: space-between;
+        padding: 60px;
+        width: 420px;
+        flex-direction: column;
+        overflow: hidden;
       }
-      .toggle-client-secret {
+      mat-card > div:first-child {
+        display: flex;
+      }
+      kbd {
+        border-radius: 3px;
+        border: 1px solid #b4b4b4;
+        color: #333;
+        display: inline-block;
+        line-height: 1;
+        background: #f1f1f1;
+        padding: 2px 4px;
+      }
+      pre {
+        border: 1px solid #b4b4b4;
+        color: #333;
+        padding: 6px 10px;
+        background: #f1f1f1;
+        overflow: scroll;
+        border-radius: 3px;
+      }
+      button {
+        position: absolute;
+        left: 215px;
+        top: 76px;
+        background: white;
+        margin: auto 0;
+        width: 110px;
+      }
+      .copy-to-clipboard {
         cursor: pointer;
+        position: absolute;
+        right: 65px;
       }
       .clipboard {
         position: absolute;
         left: -9999px;
       }
-      mat-progress-bar {
-        position: absolute;
-        left: 0px;
-      }
     `
+  ],
+  animations: [
+    trigger("inOutAnimation", [
+      transition(":enter", [
+        style({ height: 0, opacity: 0 }),
+        animate("0.4s ease-out", style({ height: 300, opacity: 1 }))
+      ]),
+      transition(":leave", [
+        style({ height: 300, opacity: 1 }),
+        animate("0.4s ease-in", style({ height: 0, opacity: 0 }))
+      ])
+    ])
   ]
 })
 export class HueAppInfoComponent {
-  authUrl = null;
-  loading = false;
-  clientSecretInputType: "text" | "password" = "password";
-  clientSecretInputIcon: "visibility" | "visibility_off" = "visibility";
-  appInfoForm = this.fb.group({
-    clientId: [null, Validators.required],
-    clientSecret: [null, Validators.required],
-    appId: [null, Validators.required]
-  });
+  progressBarColor: "primary" | "accent" = "primary";
+  progressBarMode: "buffer" | "indeterminate" | "determinate" | "query" =
+    "buffer";
+  actionSnippet = null;
+  webhook = null;
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
+  ) {}
 
-  constructor(private readonly fb: FormBuilder) {}
+  async ngOnInit() {
+    const { code, state } = this.route.snapshot.queryParams;
+    if (code && state) {
+      this.progressBarMode = "indeterminate";
+      const { webhook, status } = await this.post(environment.api.registerUrl, {
+        code,
+        state
+      });
 
-  ngOnInit() {}
-
-  toggleSecret() {
-    if (this.clientSecretInputType === "password") {
-      this.clientSecretInputType = "text";
-      this.clientSecretInputIcon = "visibility_off";
-    } else {
-      this.clientSecretInputType = "password";
-      this.clientSecretInputIcon = "visibility";
+      if (status === 404) {
+        // action not found
+      } else if (status === 501) {
+        // action pending
+      } else if (status === 503) {
+        // action revoked
+      } else {
+        this.webhook = webhook;
+        this.actionSnippet = `
+  - name: Run Hue Action
+    uses: manekinekko/hue-action@v1
+    id: hue
+    with:
+      hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
+      hueLightId: "1"
+      `;
+        this.progressBarMode = "query";
+        this.progressBarColor = "accent";
+      }
     }
   }
 
-  async generateAuthUrl() {
-    if (this.appInfoForm.valid) {
-      this.loading = true;
-      const res: { auth: string } = await this.post(
-        environment.api.authUrl,
-        this.appInfoForm.value
-      );
-      this.authUrl = res.auth;
-      this.loading = false;
-    }
+  async authorize() {
+    this.progressBarMode = "indeterminate";
+    const { auth } = await this.post(environment.api.authUrl, {});
+    document.location.href = auth;
   }
 
-  async post(url: string, body) {
+  async revoke() {
+    this.progressBarMode = "indeterminate";
+    const { state } = this.route.snapshot.queryParams;
+    const res = await this.post(environment.api.revokeUrl, { state });
+    this.progressBarMode = "buffer";
+    this.progressBarColor = "primary";
+    this.actionSnippet = null;
+    this.webhook = null;
+    this.router.navigateByUrl("/");
+  }
+
+  async post(url: string, body: object) {
     return await (
       await fetch(url, {
         method: "post",
         body: JSON.stringify(body)
       })
     ).json();
+  }
+
+  copyToClipboard(el: HTMLTextAreaElement) {
+    el.select();
+    document.execCommand("copy");
   }
 }
