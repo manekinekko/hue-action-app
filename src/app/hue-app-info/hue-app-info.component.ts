@@ -175,10 +175,11 @@ export class HueAppInfoComponent {
         this.actionSnippet = `
 - name: Run Hue Action
   uses: manekinekko/hue-action@v1
-  id: hue
+  if: success()
   with:
     hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
     hueLightId: "1"
+    hueStatus: "success"
       `;
         this.progressBarMode = "query";
         this.progressBarColor = "accent";
