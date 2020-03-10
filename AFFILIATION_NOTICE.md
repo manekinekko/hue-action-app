@@ -1,0 +1,1 @@
+The Hue Action ([https://hueaction.dev](https://hueaction.dev)) project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Microsoft, or any of its subsidiaries or its affiliates, nor Github, or any of its subsidiaries or its affiliates, nor Philips, or any of its subsidiaries or its affiliates.
