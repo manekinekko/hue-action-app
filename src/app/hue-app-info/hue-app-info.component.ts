@@ -47,6 +47,8 @@ import { trigger, transition, style, animate } from "@angular/animations";
         <pre><mat-icon class="copy-to-clipboard" (click)="copyToClipboard(webhookClipboard)"
           >filter_none</mat-icon
         ><code>{{ webhook }}</code></pre>
+        <p><strong>Note: DO NOT share this wehbook publicky!</strong></p>
+        <br />
         <p>
           2. Add this HUE Action snippet as part of your Github workflow:
         </p>
@@ -65,32 +67,37 @@ import { trigger, transition, style, animate } from "@angular/animations";
   `,
   styles: [
     `
-      img {
-        width: 60px;
-        margin: 0px;
-      }
-      img:last-child {
-        left: -10px;
-        position: relative;
-      }
-      mat-progress-bar {
-        width: 300px;
-        top: 32px;
-      }
       mat-card {
         display: flex;
         padding: 60px;
-        width: 420px;
+        width: 500px;
         flex-direction: column;
         overflow: hidden;
+        background-color: var(--background-color);
+        color: var(--color);
+      }
+      img {
+        width: 60px;
+        margin: 0px;
+        left: 10px;
+        position: relative;
+        z-index: 1;
+      }
+      img:last-child {
+        left: -10px;
+      }
+      mat-progress-bar {
+        width: 370px;
+        top: 32px;
       }
       mat-card > div:first-child {
         display: flex;
+        align-items: flex-start;
       }
+
       kbd {
         border-radius: 3px;
-        border: 1px solid #b4b4b4;
-        color: #333;
+        color: #3292ff;
         display: inline-block;
         line-height: 1;
         background: #f1f1f1;
@@ -98,15 +105,15 @@ import { trigger, transition, style, animate } from "@angular/animations";
       }
       pre {
         border: 1px solid #b4b4b4;
-        color: #333;
+        color: #3292ff;
         padding: 6px 10px;
         background: #f1f1f1;
-        overflow: scroll;
+        overflow: auto;
         border-radius: 3px;
       }
       button {
         position: absolute;
-        left: 215px;
+        left: 254px;
         top: 76px;
         background: white;
         margin: auto 0;
@@ -116,6 +123,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
         cursor: pointer;
         position: absolute;
         right: 65px;
+        margin-top: -3px;
       }
       .clipboard {
         position: absolute;
@@ -165,12 +173,12 @@ export class HueAppInfoComponent {
       } else {
         this.webhook = webhook;
         this.actionSnippet = `
-  - name: Run Hue Action
-    uses: manekinekko/hue-action@v1
-    id: hue
-    with:
-      hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
-      hueLightId: "1"
+- name: Run Hue Action
+  uses: manekinekko/hue-action@v1
+  id: hue
+  with:
+    hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
+    hueLightId: "1"
       `;
         this.progressBarMode = "query";
         this.progressBarColor = "accent";
@@ -188,7 +196,7 @@ export class HueAppInfoComponent {
     this.progressBarMode = "indeterminate";
     const { state } = this.route.snapshot.queryParams;
     const res = await this.post(environment.api.revokeUrl, { state });
-    this.progressBarMode = "buffer";
+    this.progressBarMode = "indeterminate";
     this.progressBarColor = "primary";
     this.actionSnippet = null;
     this.webhook = null;
