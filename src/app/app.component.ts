@@ -11,13 +11,24 @@ import { DOCUMENT } from "@angular/common";
     <router-outlet></router-outlet>
     <footer>
       Made by
-      <a href="https://twitter.com/@manekinekko">Wassim Chegham</a> •
-      <a href="https://manekinekko.com/manekinekko/hue-action-app"
+      <a target="__blank" href="https://twitter.com/@manekinekko"
+        >Wassim Chegham</a
+      >
+      •
+      <a target="__blank" href="https://github.com/manekinekko/hue-action-app"
         >Contribute</a
       >
       •
-      <a href="https://manekinekko.com/manekinekko/hue-action-app/PRIVACY.md"
+      <a
+        target="__blank"
+        href="https://github.com/manekinekko/hue-action-app/blob/master//PRIVACY.md"
         >Privacy</a
+      >
+      •
+      <a
+        target="__blank"
+        href="https://github.com/manekinekko/hue-action-app/blob/master//AFFILIATION_NOTICE.md"
+        >Non Affiliation notice</a
       >
     </footer>
   `,
