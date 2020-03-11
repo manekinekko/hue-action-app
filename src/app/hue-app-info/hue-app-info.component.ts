@@ -266,4 +266,6 @@ export class HueAppInfoComponent {
     el.select();
     document.execCommand("copy");
   }
+
+  getQueryParams() {}
 }
