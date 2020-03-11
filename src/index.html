@@ -49,7 +49,6 @@
         flex-direction: column;
         background-image: url(/assets/tiles-cubes.webp);
         animation: color-cycle 44s linear infinite;
-        transition: all 1s;
         background-color: var(--background-color);
         color: var(--color);
       }
@@ -156,6 +155,18 @@
           opacity: 0.3;
         }
       }
+
+      #portrait-mode-message {
+        display: none;
+      }
+      @media screen and (max-width: 700px) and (orientation: portrait) {
+        app-root#app {
+          display: none;
+        }
+        #portrait-mode-message {
+          display: inline-block;
+        }
+      }
     </style>
     <link
       async
@@ -174,6 +185,9 @@
         alt="hue action loading logo"
       />
       <div class="ray"></div>
+    </section>
+    <section id="portrait-mode-message">
+      <h3>Please turn your device into landscape mode to continue...</h3>
     </section>
     <app-root id="app">
       Loading application...
