@@ -16,8 +16,8 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
 @NgModule({
   declarations: [AppComponent, HueAppInfoComponent],
   imports: [
@@ -35,9 +35,16 @@ import { environment } from '../environments/environment';
     MatProgressBarModule,
     ReactiveFormsModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: "WINDOW",
+      useValue: window
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

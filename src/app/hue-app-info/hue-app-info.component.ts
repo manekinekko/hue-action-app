@@ -1,8 +1,7 @@
 import { animate, style, transition, trigger } from "@angular/animations";
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 
 @Component({
@@ -184,7 +183,7 @@ export class HueAppInfoComponent {
   actionSnippet = null;
   webhook = null;
   constructor(
-    private readonly router: Router,
+    @Inject("WINDOW") public window: Window,
     private readonly iconRegistry: MatIconRegistry,
     private readonly sanitizer: DomSanitizer
   ) {
@@ -252,7 +251,7 @@ export class HueAppInfoComponent {
     this.progressBarColor = "primary";
     this.actionSnippet = null;
     this.webhook = null;
-    this.router.navigateByUrl("/");
+    this.window.history.pushState({}, "", "/");
   }
 
   async post(url: string, body: object) {
@@ -270,7 +269,7 @@ export class HueAppInfoComponent {
   }
 
   getQueryParams() {
-    var urlParams = new URLSearchParams(window.location.search);
+    var urlParams = new URLSearchParams(this.window.location.search);
     var code = urlParams.get("code");
     var state = urlParams.get("state");
     var error = urlParams.get("error");
