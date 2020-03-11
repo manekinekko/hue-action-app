@@ -1,15 +1,15 @@
+import { animate, style, transition, trigger } from "@angular/animations";
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
 import { MatIconRegistry } from "@angular/material/icon";
-import { environment } from "src/environments/environment";
-import { trigger, transition, style, animate } from "@angular/animations";
 import { DomSanitizer } from "@angular/platform-browser";
+import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "hue-app-info",
   template: `
     <mat-card class="mat-elevation-z8">
-      <div>
+      <div class="actions">
         <img
           width="60px"
           src="/assets/philipsHue.webp"
@@ -106,6 +106,9 @@ import { DomSanitizer } from "@angular/platform-browser";
         background-color: var(--background-color);
         color: var(--color);
       }
+      .actions {
+        z-index: 9999999999;
+      }
       img {
         width: 60px;
         margin: 0px;
@@ -181,7 +184,6 @@ export class HueAppInfoComponent {
   actionSnippet = null;
   webhook = null;
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly iconRegistry: MatIconRegistry,
     private readonly sanitizer: DomSanitizer
@@ -205,7 +207,7 @@ export class HueAppInfoComponent {
   }
 
   async ngOnInit() {
-    const { code, state } = this.route.snapshot.queryParams;
+    const { code, state } = this.getQueryParams();
     if (code && state) {
       this.progressBarMode = "indeterminate";
       const { webhook, status } = await this.post(environment.api.registerUrl, {
@@ -244,7 +246,7 @@ export class HueAppInfoComponent {
 
   async revoke() {
     this.progressBarMode = "indeterminate";
-    const { state } = this.route.snapshot.queryParams;
+    const { state } = this.getQueryParams();
     const res = await this.post(environment.api.revokeUrl, { state });
     this.progressBarMode = "indeterminate";
     this.progressBarColor = "primary";
@@ -267,5 +269,15 @@ export class HueAppInfoComponent {
     document.execCommand("copy");
   }
 
-  getQueryParams() {}
+  getQueryParams() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var code = urlParams.get("code");
+    var state = urlParams.get("state");
+    var error = urlParams.get("error");
+    return {
+      code,
+      state,
+      error
+    };
+  }
 }
