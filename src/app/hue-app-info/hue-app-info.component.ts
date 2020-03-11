@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { MatIconRegistry } from "@angular/material/icon";
 import { environment } from "src/environments/environment";
 import { trigger, transition, style, animate } from "@angular/animations";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "hue-app-info",
@@ -23,7 +25,13 @@ import { trigger, transition, style, animate } from "@angular/animations";
           color="primary"
           (click)="authorize()"
         >
-          Authorize <mat-icon>lock_open</mat-icon>
+          Authorize
+          <mat-icon
+            svgIcon="lock_open"
+            aria-hidden="false"
+            aria-label="Authorize Philips Hue access"
+            >lock_open</mat-icon
+          >
         </button>
         <button
           *ngIf="actionSnippet"
@@ -31,7 +39,13 @@ import { trigger, transition, style, animate } from "@angular/animations";
           color="accent"
           (click)="revoke()"
         >
-          Revoke <mat-icon>lock</mat-icon>
+          Revoke
+          <mat-icon
+            svgIcon="lock"
+            aria-hidden="false"
+            aria-label="Revoke Philips Hue access"
+            >lock</mat-icon
+          >
         </button>
         <img
           width="60px"
@@ -52,7 +66,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
           >
           called <kbd>HUEACTION_WEBHOOK</kbd> with:
         </p>
-        <pre><mat-icon class="copy-to-clipboard" (click)="copyToClipboard(webhookClipboard)"
+        <pre><mat-icon svgIcon="filter_none" aria-hidden="false" aria-label="Copy code snippet" class="copy-to-clipboard" (click)="copyToClipboard(webhookClipboard)"
           >filter_none</mat-icon
         ><code>{{ webhook }}</code></pre>
         <p><strong>Note: DO NOT share this wehbook publicky!</strong></p>
@@ -62,7 +76,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
         </p>
         <pre>
         <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard)"
-          >filter_none</mat-icon
+        svgIcon="filter_none" aria-hidden="false" aria-label="Copy code snippet">filter_none</mat-icon
         ><code>{{actionSnippet}}</code></pre>
       </div>
     </mat-card>
@@ -168,8 +182,27 @@ export class HueAppInfoComponent {
   webhook = null;
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    private readonly iconRegistry: MatIconRegistry,
+    private readonly sanitizer: DomSanitizer
+  ) {
+    iconRegistry.addSvgIcon(
+      "filter_none",
+      sanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icons/filter_none-24px.svg"
+      )
+    );
+    iconRegistry.addSvgIcon(
+      "lock",
+      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/lock-24px.svg")
+    );
+    iconRegistry.addSvgIcon(
+      "lock_open",
+      sanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icons/lock_open-24px.svg"
+      )
+    );
+  }
 
   async ngOnInit() {
     const { code, state } = this.route.snapshot.queryParams;

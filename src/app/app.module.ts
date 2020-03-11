@@ -15,6 +15,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 @NgModule({
   declarations: [AppComponent, HueAppInfoComponent],
   imports: [
@@ -30,7 +31,8 @@ import { ReactiveFormsModule } from "@angular/forms";
     MatToolbarModule,
     MatDividerModule,
     MatProgressBarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
