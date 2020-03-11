@@ -54,6 +54,13 @@
         color: var(--color);
       }
 
+      @media (prefers-color-scheme: dark) {
+        body {
+          --background-color: #121212;
+          --color: #fff;
+          --ray-visibility: visible;
+        }
+      }
       body.dark-theme {
         --background-color: #121212;
         --color: #fff;
@@ -71,6 +78,8 @@
         transform-origin: center -20px;
         margin-top: -110px;
         z-index: 999999;
+        position: absolute;
+        top: 110px;
       }
 
       .lamp img {
@@ -79,9 +88,9 @@
 
       .ray {
         display: block;
-        height: 100px;
+        height: 600px;
         position: absolute;
-        width: 200px;
+        width: 600px;
         margin-top: -39px;
         z-index: 999999999999;
         background: rgb(255, 255, 0);
@@ -90,9 +99,10 @@
           rgba(255, 255, 0, 0.3) 0%,
           rgba(255, 255, 255, 0) 50%
         );
-        clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
-        margin-left: -50px;
+        clip-path: polygon(40% 0, 56% 0, 100% 100%, 0 100%);
+        margin-left: -238px;
         visibility: var(--ray-visibility);
+        animation: intermit 0.01s infinite alternate;
       }
 
       body.dark-theme .ray {
@@ -138,6 +148,12 @@
         }
         100% {
           background-position: 69% 100%;
+        }
+      }
+
+      @keyframes intermit {
+        75% {
+          opacity: 0.3;
         }
       }
     </style>
