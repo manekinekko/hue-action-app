@@ -1,6 +1,6 @@
 # Privacy Policy
 
-[hueaction.dev](https://hueaction.dev), code name "[HUE Action](https://github.com/manekinekko/hue-action-app)" is a open source app. This Service, [hueaction.dev](https://hueaction.dev), is provided by [Wassim Chegham](https://twitter.com/manekinekko) at no cost and is intended for use as is.
+[hueaction.dev](https://hueaction.dev), code name "[Hue Action](https://github.com/manekinekko/hue-action-app)" is a open source app. This Service, [hueaction.dev](https://hueaction.dev), is provided by [Wassim Chegham](https://twitter.com/manekinekko) at no cost and is intended for use as is.
 
 This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.
 
@@ -56,7 +56,7 @@ If you have any questions or suggestions about our Privacy Policy, do not hesita
 ### Open Source Support
 
 Feel free to open an issue or contact us via e-mail [hi@hueaction.dev](mailto:hi@hueaction.dev).<br/>
-If you find any bug, please contribute by [opening an issue](https://github.com/manekinekko/hexa/issues/new/choose) or sending a [pull request](https://github.com/manekinekko/hexa/pulls) with the fix.
+If you find any bug, please contribute by [opening an issue](https://github.com/manekinekko/hue-action/issues/new/choose) or sending a [pull request](https://github.com/manekinekko/hue-action/pulls) with the fix.
 
 ---
 
