@@ -18,26 +18,39 @@
       name="description"
       content="Trigger your Philips Hue lights from your Github builds workflows, based on the build status."
     />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="https://hueaction.dev" />
+    <meta name="twitter:creator" content="@manekinekko" />
+    <meta property="og:url" content="https://hueaction.dev" />
+    <meta property="og:title" content="Hue Action" />
+    <meta
+      property="og:description"
+      content="Trigger your Philips Hue lights from your Github builds workflows, based on the build status."
+    />
+    <meta
+      property="og:image"
+      content="http://graphics8.nytimes.com/images/2011/12/08/technology/bits-newtwitter/bits-newtwitter-tmagArticle.jpg"
+    />
+
     <link rel="icon" type="image/png" href="favicon.png" />
     <script
       async=""
       src="https://www.googletagmanager.com/gtag/js?id=UA-160313929-1"
     ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "UA-160313929-1");
-    </script>
     <style>
       :root {
         --background-color: #fff;
         --color: #363636;
         --ray-visibility: hidden;
       }
-
+      @font-face {
+        font-family: "Roboto";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local("Roboto"), local("Roboto-Regular"),
+          url(/assets/fonts/Roboto.woff2) format("woff2");
+      }
       html,
       body {
         height: 100%;
@@ -172,11 +185,6 @@
         }
       }
     </style>
-    <link
-      async=""
-      href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap&amp;text=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      rel="stylesheet"
-    />
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#1976d2" />
   </head>
@@ -220,8 +228,21 @@
         >Non Affiliation Notice</a
       >
     </footer>
-    <noscript
-      >Please enable JavaScript to continue using this application.</noscript
+    <noscript>
+      <style>
+        #portrait-mode-message {
+          display: inline-block;
+        }
+      </style>
+      Please enable JavaScript to continue using this application.</noscript
     >
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-160313929-1");
+    </script>
   </body>
 </html>
