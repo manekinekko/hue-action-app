@@ -8,7 +8,11 @@ import { trigger, transition, style, animate } from "@angular/animations";
   template: `
     <mat-card class="mat-elevation-z8">
       <div>
-        <img width="60px" src="/assets/philipsHue.png" alt="Philips Hue logo" />
+        <img
+          width="60px"
+          src="/assets/philipsHue.webp"
+          alt="Philips Hue logo"
+        />
         <mat-progress-bar
           [mode]="progressBarMode"
           [color]="progressBarColor"
@@ -31,7 +35,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
         </button>
         <img
           width="60px"
-          src="/assets/github-actions.png"
+          src="/assets/github-actions.webp"
           alt="Github Actions logo"
         />
       </div>

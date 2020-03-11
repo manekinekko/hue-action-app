@@ -27,14 +27,6 @@
       gtag("js", new Date());
       gtag("config", "UA-160313929-1");
     </script>
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
     <style>
       :root {
         --background-color: #fff;
@@ -54,7 +46,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-image: url(/assets/tiles-cubes.png);
+        background-image: url(/assets/tiles-cubes.webp);
         animation: color-cycle 44s linear infinite;
         transition: all 1s;
         background-color: var(--background-color);
@@ -145,6 +137,14 @@
         }
       }
     </style>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class="mat-typography">
     <a class="skip-link" href="#app">Skip to app</a>
@@ -152,7 +152,7 @@
       <img
         width="100px"
         (click)="changeBackground()"
-        src="/assets/lamp.svg"
+        src="/assets/lamp.webp"
         onclick="body.classList.toggle('dark-theme');"
         alt="hue action loading logo"
       />
