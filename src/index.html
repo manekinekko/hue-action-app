@@ -46,6 +46,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
         background-image: url(/assets/tiles-cubes.webp);
         animation: color-cycle 44s linear infinite;
         transition: all 1s;
@@ -68,15 +69,18 @@
         width: 100px;
         animation: swing ease-in-out 1s infinite alternate;
         transform-origin: center -20px;
-        cursor: pointer;
-        position: absolute;
         margin-top: -110px;
         z-index: 999999;
+      }
+
+      .lamp img {
+        cursor: pointer;
       }
 
       .ray {
         display: block;
         height: 100px;
+        position: absolute;
         width: 200px;
         margin-top: -39px;
         z-index: 999999999999;
@@ -138,11 +142,8 @@
       }
     </style>
     <link
+      async
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap"
       rel="stylesheet"
     />
   </head>
