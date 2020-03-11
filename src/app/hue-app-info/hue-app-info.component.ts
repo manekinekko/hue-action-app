@@ -105,7 +105,7 @@ import { environment } from "src/environments/environment";
         background-color: var(--background-color);
         color: var(--color);
       }
-      .actions {
+      mat-card > div {
         z-index: 9999999999;
       }
       img {
