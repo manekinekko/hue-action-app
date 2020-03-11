@@ -60,4 +60,4 @@ If you find any bug, please contribute by [opening an issue](https://github.com/
 
 ---
 
-Updated September 29th, 2019.
+Updated March 11th, 2020.
