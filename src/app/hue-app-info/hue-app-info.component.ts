@@ -8,7 +8,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
   template: `
     <mat-card class="mat-elevation-z8">
       <div>
-        <img src="/assets/philipsHue.png" />
+        <img width="60px" src="/assets/philipsHue.png" alt="Philips Hue logo" />
         <mat-progress-bar
           [mode]="progressBarMode"
           [color]="progressBarColor"
@@ -29,7 +29,11 @@ import { trigger, transition, style, animate } from "@angular/animations";
         >
           Revoke <mat-icon>lock</mat-icon>
         </button>
-        <img src="/assets/github-actions.png" />
+        <img
+          width="60px"
+          src="/assets/github-actions.png"
+          alt="Github Actions logo"
+        />
       </div>
       <div *ngIf="actionSnippet" [@inOutAnimation]>
         <br />
@@ -58,8 +62,16 @@ import { trigger, transition, style, animate } from "@angular/animations";
         ><code>{{actionSnippet}}</code></pre>
       </div>
     </mat-card>
-    <textarea #webhookClipboard [value]="webhook" class="clipboard"></textarea>
+    <label for="webhookClipboard" class="clipboard"></label>
     <textarea
+      id="webhookClipboard"
+      #webhookClipboard
+      [value]="webhook"
+      class="clipboard"
+    ></textarea>
+    <label for="actionSnippetClipboard" class="clipboard"></label>
+    <textarea
+      id="actionSnippetClipboard"
       #actionSnippetClipboard
       [value]="actionSnippet"
       class="clipboard"

@@ -1,5 +1,4 @@
-import { Component, Inject } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component } from "@angular/core";
 
 @Component({
   selector: "app-root",
@@ -16,9 +15,4 @@ import { DOCUMENT } from "@angular/common";
     `
   ]
 })
-export class AppComponent {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
-  changeBackground() {
-    this.document.body.classList.toggle("dark-theme");
-  }
-}
+export class AppComponent {}
