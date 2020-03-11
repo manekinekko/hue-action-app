@@ -224,7 +224,7 @@ export class HueAppInfoComponent {
         this.webhook = webhook;
         this.actionSnippet = `
 - name: Run Hue Action
-  uses: manekinekko/hue-action@v1
+  uses: manekinekko/hue-action@v1.0
   if: success()
   with:
     hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
