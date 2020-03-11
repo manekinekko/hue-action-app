@@ -28,8 +28,129 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <style>
+      :root {
+        --background-color: #fff;
+        --color: #363636;
+        --ray-visibility: hidden;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url(/assets/tiles-cubes.png);
+        animation: color-cycle 44s linear infinite;
+        transition: all 1s;
+        background-color: var(--background-color);
+      }
+
+      body.dark-theme {
+        --background-color: #121212;
+        --color: #fff;
+        --ray-visibility: visible;
+      }
+
+      a {
+        color: #ff4081;
+        text-decoration: underline;
+      }
+
+      .lamp {
+        width: 100px;
+        animation: swing ease-in-out 1s infinite alternate;
+        transform-origin: center -20px;
+        cursor: pointer;
+        position: absolute;
+        margin-top: -110px;
+        z-index: 999999;
+      }
+
+      .ray {
+        display: block;
+        height: 100px;
+        width: 200px;
+        margin-top: -39px;
+        z-index: 999999999999;
+        background: rgb(255, 255, 0);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 0, 0.3) 0%,
+          rgba(255, 255, 255, 0) 50%
+        );
+        clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
+        margin-left: -50px;
+        visibility: var(--ray-visibility);
+      }
+
+      body.dark-theme .ray {
+        visibility: visible;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 10px;
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+        left: 0;
+        color: #9a9a9a;
+      }
+
+      @keyframes swing {
+        0% {
+          transform: rotate(3deg);
+        }
+        100% {
+          transform: rotate(-3deg);
+        }
+      }
+
+      @keyframes color-cycle {
+        0% {
+          background-position: 32% 0%;
+        }
+        100% {
+          background-position: 69% 100%;
+        }
+      }
+    </style>
   </head>
   <body class="mat-typography">
+    <section class="lamp">
+      <img width="100px" (click)="changeBackground()" src="/assets/lamp.svg" />
+      <div class="ray"></div>
+    </section>
     <app-root></app-root>
+    <footer>
+      Made by
+      <a target="__blank" href="https://twitter.com/@manekinekko"
+        >Wassim Chegham</a
+      >
+      •
+      <a target="__blank" href="https://github.com/manekinekko/hue-action-app"
+        >Contribute</a
+      >
+      •
+      <a
+        target="__blank"
+        href="https://github.com/manekinekko/hue-action-app/blob/master//PRIVACY.md"
+        >Privacy</a
+      >
+      •
+      <a
+        target="__blank"
+        href="https://github.com/manekinekko/hue-action-app/blob/master//AFFILIATION_NOTICE.md"
+        >Non Affiliation Notice</a
+      >
+    </footer>
   </body>
 </html>
