@@ -72,7 +72,8 @@ import { environment } from "src/environments/environment";
         <p><strong>Note: DO NOT share this wehbook publicky!</strong></p>
         <br />
         <p>
-          2. Add this HUE Action snippet as part of your Github workflow:
+          2. Add this Hue Action snippet to your Github workflow and customize
+          the <kbd>hueLightId</kbd>:
         </p>
         <pre>
         <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard)"
@@ -220,7 +221,7 @@ export class HueAppInfoComponent {
     const { code, state, error } = this.getQueryParams();
 
     if (error?.includes("access_denied")) {
-      this.error = "Philips Hue Account not authorized";
+      this.error = "You need to grant permission to continue!";
       this.progressBarMode = "buffer";
       this.progressBarColor = "accent";
     } else if (code && state) {
@@ -228,7 +229,8 @@ export class HueAppInfoComponent {
       this.progressBarColor = "primary";
       const { webhook, status } = await this.post(environment.api.registerUrl, {
         code,
-        state
+        state,
+        prod: environment.production
       });
 
       if (status === 404) {
@@ -262,7 +264,9 @@ export class HueAppInfoComponent {
     this.progressBarMode = "indeterminate";
     this.progressBarColor = "primary";
     try {
-      const { auth } = await this.post(environment.api.authUrl, {});
+      const { auth } = await this.post(environment.api.authUrl, {
+        prod: environment.production
+      });
       document.location.href = auth;
     } catch (error) {
       this.progressBarMode = "buffer";
