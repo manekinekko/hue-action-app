@@ -52,6 +52,7 @@ import { environment } from "src/environments/environment";
           alt="Github Actions logo"
         />
       </div>
+      <p class="error" [hidden]="!error">{{ error }}</p>
       <div *ngIf="actionSnippet" [@inOutAnimation]>
         <br />
         <br />
@@ -161,6 +162,14 @@ import { environment } from "src/environments/environment";
         position: absolute;
         left: -9999px;
       }
+      .error {
+        text-align: center;
+        color: red;
+        position: absolute;
+        width: 100%;
+        left: 0px;
+        top: 130px;
+      }
     `
   ],
   animations: [
@@ -182,6 +191,7 @@ export class HueAppInfoComponent {
     "buffer";
   actionSnippet = null;
   webhook = null;
+  error = null;
   constructor(
     @Inject("WINDOW") public window: Window,
     private readonly iconRegistry: MatIconRegistry,
@@ -206,9 +216,16 @@ export class HueAppInfoComponent {
   }
 
   async ngOnInit() {
-    const { code, state } = this.getQueryParams();
-    if (code && state) {
+    this.error = null;
+    const { code, state, error } = this.getQueryParams();
+
+    if (error.includes("access_denied")) {
+      this.error = "Philips Hue Account not authorized";
+      this.progressBarMode = "buffer";
+      this.progressBarColor = "accent";
+    } else if (code && state) {
       this.progressBarMode = "indeterminate";
+      this.progressBarColor = "primary";
       const { webhook, status } = await this.post(environment.api.registerUrl, {
         code,
         state
@@ -216,10 +233,13 @@ export class HueAppInfoComponent {
 
       if (status === 404) {
         // action not found
+        this.error = "Unknown session.";
       } else if (status === 501) {
         // action pending
+        this.error = "Pending session.";
       } else if (status === 503) {
         // action revoked
+        this.error = "Session revoked.";
       } else {
         this.webhook = webhook;
         this.actionSnippet = `
@@ -238,20 +258,38 @@ export class HueAppInfoComponent {
   }
 
   async authorize() {
+    this.error = null;
     this.progressBarMode = "indeterminate";
-    const { auth } = await this.post(environment.api.authUrl, {});
-    document.location.href = auth;
+    this.progressBarColor = "primary";
+    try {
+      const { auth } = await this.post(environment.api.authUrl, {});
+      document.location.href = auth;
+    } catch (error) {
+      this.progressBarMode = "buffer";
+      this.progressBarColor = "accent";
+      this.error = error.toString();
+      console.log(error);
+    }
   }
 
   async revoke() {
-    this.progressBarMode = "indeterminate";
-    const { state } = this.getQueryParams();
-    const res = await this.post(environment.api.revokeUrl, { state });
+    this.error = null;
     this.progressBarMode = "indeterminate";
     this.progressBarColor = "primary";
-    this.actionSnippet = null;
-    this.webhook = null;
-    this.window.history.pushState({}, "", "/");
+    const { state } = this.getQueryParams();
+    try {
+      const res = await this.post(environment.api.revokeUrl, { state });
+      this.progressBarMode = "indeterminate";
+      this.progressBarColor = "primary";
+      this.actionSnippet = null;
+      this.webhook = null;
+      this.window.history.pushState({}, "", "/");
+    } catch (error) {
+      this.progressBarMode = "buffer";
+      this.progressBarColor = "accent";
+      this.error = error.toString();
+      console.log(error);
+    }
   }
 
   async post(url: string, body: object) {
