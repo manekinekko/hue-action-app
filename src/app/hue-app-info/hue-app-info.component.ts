@@ -219,7 +219,7 @@ export class HueAppInfoComponent {
     this.error = null;
     const { code, state, error } = this.getQueryParams();
 
-    if (error.includes("access_denied")) {
+    if (error?.includes("access_denied")) {
       this.error = "Philips Hue Account not authorized";
       this.progressBarMode = "buffer";
       this.progressBarColor = "accent";
