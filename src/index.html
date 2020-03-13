@@ -39,7 +39,7 @@
     ></script>
     <style>
       :root {
-        --background-color: #fff;
+        --background-color: #fafafa;
         --color: #363636;
         --ray-visibility: hidden;
       }
@@ -58,8 +58,6 @@
       body {
         margin: 0;
         font-family: Roboto, "Helvetica Neue", sans-serif;
-      }
-      body {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -68,19 +66,42 @@
         animation: color-cycle 44s linear infinite;
         background-color: var(--background-color);
         color: var(--color);
+        transition: color 0.5s ease, background-color 0.5s ease;
       }
 
-      @media (prefers-color-scheme: dark) {
+      /* @media (prefers-color-scheme: dark) {
         body {
           --background-color: #121212;
-          --color: #fff;
+          --color: #fafafa;
           --ray-visibility: visible;
         }
-      }
+        body .mat-stroked-button {
+          border-color: var(--color);
+        }
+        body .mat-stroked-button[disabled] {
+          color: #bbbbbb;
+        }
+        body .mat-select-arrow,
+        body .mat-select-value,
+        body .mat-form-field-label {
+          color: var(--color);
+        }
+      } */
       body.dark-theme {
         --background-color: #121212;
-        --color: #fff;
+        --color: #fafafa;
         --ray-visibility: visible;
+      }
+      body.dark-theme .mat-stroked-button {
+        border-color: var(--color);
+      }
+      body.dark-theme .mat-stroked-button[disabled] {
+        color: #bbbbbb;
+      }
+      body.dark-theme .mat-select-value,
+      body.dark-theme .mat-select-arrow,
+      body.dark-theme .mat-form-field-label {
+        color: var(--color);
       }
 
       a {
@@ -242,6 +263,13 @@
       }
       gtag("js", new Date());
       gtag("config", "UA-160313929-1");
+      window.matchMedia("(prefers-color-scheme: dark)").addListener(e => {
+        if (e.matches) {
+          document.body.classList.add("dark-theme");
+        } else {
+          document.body.classList.remove("dark-theme");
+        }
+      });
     </script>
   </body>
 </html>

@@ -82,18 +82,22 @@ import { environment } from "src/environments/environment";
           <mat-form-field color="accent">
             <mat-label color="accent">Choose light ID</mat-label>
             <mat-select
-              color="accent"
               [(value)]="selectedLightId"
               [disabled]="pingingWebhook"
+              disableRipple="true"
             >
               <mat-option *ngFor="let light of lights" [value]="light.value">
                 {{ light.viewValue }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field color="accent">
             <mat-label>Choose light status</mat-label>
-            <mat-select [(value)]="selectedStatus" [disabled]="pingingWebhook">
+            <mat-select
+              [(value)]="selectedStatus"
+              [disabled]="pingingWebhook"
+              disableRipple="true"
+            >
               <mat-option
                 *ngFor="let status of statuses"
                 [value]="status.value"
@@ -114,8 +118,7 @@ import { environment } from "src/environments/environment";
         </p>
         <br />
         <p>
-          3. Add this Hue Action snippet to your Github workflow and customize
-          the <kbd>hueLightId</kbd>:
+          3. Add this Hue Action snippet to your Github workflow:
         </p>
         <pre>
         <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard, snippetCode)"
@@ -161,6 +164,9 @@ import { environment } from "src/environments/environment";
       }
       mat-form-field {
         margin: 20px 16px -12px;
+      }
+      :host .mat-select-value {
+        color: var(--color);
       }
       img {
         width: 60px;
@@ -367,6 +373,7 @@ export class HueAppInfoComponent {
   }
 
   async tryIt() {
+    this.error = null;
     this.pingingWebhook = true;
     this.progressBarMode = "buffer";
     this.progressBarColor = "accent";
@@ -381,6 +388,7 @@ export class HueAppInfoComponent {
     } else {
       this.progressBarMode = "query";
       this.progressBarColor = "accent";
+      this.error = null;
     }
     this.pingingWebhook = false;
   }
