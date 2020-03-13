@@ -81,7 +81,11 @@ import { environment } from "src/environments/environment";
           <br />
           <mat-form-field color="accent">
             <mat-label color="accent">Choose light ID</mat-label>
-            <mat-select color="accent" [(value)]="selectedLightId">
+            <mat-select
+              color="accent"
+              [(value)]="selectedLightId"
+              [disabled]="pingingWebhook"
+            >
               <mat-option *ngFor="let light of lights" [value]="light.value">
                 {{ light.viewValue }}
               </mat-option>
@@ -89,7 +93,7 @@ import { environment } from "src/environments/environment";
           </mat-form-field>
           <mat-form-field>
             <mat-label>Choose light status</mat-label>
-            <mat-select [(value)]="selectedStatus">
+            <mat-select [(value)]="selectedStatus" [disabled]="pingingWebhook">
               <mat-option
                 *ngFor="let status of statuses"
                 [value]="status.value"
@@ -256,22 +260,22 @@ export class HueAppInfoComponent {
   error = null;
   constructor(
     @Inject("WINDOW") public window: Window,
-    private readonly iconRegistry: MatIconRegistry,
-    private readonly sanitizer: DomSanitizer
+    private readonly _iconRegistry: MatIconRegistry,
+    private readonly _sanitizer: DomSanitizer
   ) {
-    iconRegistry.addSvgIcon(
+    _iconRegistry.addSvgIcon(
       "filter_none",
-      sanitizer.bypassSecurityTrustResourceUrl(
+      _sanitizer.bypassSecurityTrustResourceUrl(
         "assets/icons/filter_none-24px.svg"
       )
     );
-    iconRegistry.addSvgIcon(
+    _iconRegistry.addSvgIcon(
       "lock",
-      sanitizer.bypassSecurityTrustResourceUrl("assets/icons/lock-24px.svg")
+      _sanitizer.bypassSecurityTrustResourceUrl("assets/icons/lock-24px.svg")
     );
-    iconRegistry.addSvgIcon(
+    _iconRegistry.addSvgIcon(
       "lock_open",
-      sanitizer.bypassSecurityTrustResourceUrl(
+      _sanitizer.bypassSecurityTrustResourceUrl(
         "assets/icons/lock_open-24px.svg"
       )
     );
