@@ -359,7 +359,7 @@ export class HueAppInfoComponent {
       if (res.error) {
         this.error = res.error;
       }
-      this.progressBarMode = "indeterminate";
+      this.progressBarMode = "buffer";
       this.progressBarColor = "primary";
       // this.webhook = null;
       this.webhook = null;
@@ -379,7 +379,8 @@ export class HueAppInfoComponent {
     this.progressBarColor = "accent";
     const res = await this.post(this.webhook, {
       lightId: this.selectedLightId,
-      status: this.selectedStatus
+      status: this.selectedStatus,
+      prod: environment.production
     });
     if (res.error) {
       this.error = res.error;
@@ -394,12 +395,16 @@ export class HueAppInfoComponent {
   }
 
   async post(url: string, body: object) {
-    return await (
-      await fetch(url, {
-        method: "post",
-        body: JSON.stringify(body)
-      })
-    ).json();
+    try {
+      return await (
+        await fetch(url, {
+          method: "post",
+          body: JSON.stringify(body)
+        })
+      ).json();
+    } catch (error) {
+      this.error = error;
+    }
   }
 
   copyToClipboard(textarea: HTMLTextAreaElement, code?: HTMLElement) {
