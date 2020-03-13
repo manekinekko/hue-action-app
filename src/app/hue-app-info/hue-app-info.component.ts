@@ -19,8 +19,9 @@ import { environment } from "src/environments/environment";
           [color]="progressBarColor"
         ></mat-progress-bar>
         <button
-          *ngIf="!actionSnippet"
+          *ngIf="!webhook"
           mat-stroked-button
+          class="authorize"
           color="primary"
           (click)="authorize()"
         >
@@ -33,8 +34,9 @@ import { environment } from "src/environments/environment";
           >
         </button>
         <button
-          *ngIf="actionSnippet"
+          *ngIf="webhook"
           mat-stroked-button
+          class="revoke"
           color="accent"
           (click)="revoke()"
         >
@@ -53,7 +55,7 @@ import { environment } from "src/environments/environment";
         />
       </div>
       <p class="error" [hidden]="!error">{{ error }}</p>
-      <div *ngIf="actionSnippet" [@inOutAnimation]>
+      <div *ngIf="webhook" [@inOutAnimation]>
         <br />
         <br />
         <h2>You are almost done!</h2>
@@ -69,16 +71,60 @@ import { environment } from "src/environments/environment";
         <pre><mat-icon svgIcon="filter_none" aria-hidden="false" aria-label="Copy code snippet" class="copy-to-clipboard" (click)="copyToClipboard(webhookClipboard)"
           >filter_none</mat-icon
         ><code>{{ webhook }}</code></pre>
-        <p><strong>Note: DO NOT share this wehbook publicky!</strong></p>
+        <p>
+          <strong>Note: DO NOT share this wehbook publicky!</strong>
+        </p>
         <br />
         <p>
-          2. Add this Hue Action snippet to your Github workflow and customize
+          2. (Optional) Customize <kbd>hueLightId</kbd> and
+          <kbd>hueStatus</kbd>:
+          <br />
+          <mat-form-field color="accent">
+            <mat-label color="accent">Choose light ID</mat-label>
+            <mat-select color="accent" [(value)]="selectedLightId">
+              <mat-option *ngFor="let light of lights" [value]="light.value">
+                {{ light.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Choose light status</mat-label>
+            <mat-select [(value)]="selectedStatus">
+              <mat-option
+                *ngFor="let status of statuses"
+                [value]="status.value"
+              >
+                {{ status.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button
+            [disabled]="pingingWebhook"
+            mat-stroked-button
+            (click)="tryIt()"
+            class="btn-try-it"
+          >
+            Try it
+          </button>
+        </p>
+        <br />
+        <p>
+          3. Add this Hue Action snippet to your Github workflow and customize
           the <kbd>hueLightId</kbd>:
         </p>
         <pre>
-        <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard)"
+        <mat-icon class="copy-to-clipboard" (click)="copyToClipboard(actionSnippetClipboard, snippetCode)"
         svgIcon="filter_none" aria-hidden="false" aria-label="Copy code snippet">filter_none</mat-icon
-        ><code>{{actionSnippet}}</code></pre>
+        ><code #snippetCode>
+- name: Run Hue Action
+  uses: manekinekko/hue-action@v1.0
+  if: {{this.selectedStatus}}()
+  with:
+    hueWebhook: <span ngNonBindable>\${{ secrets.HUEACTION_WEBHOOK }}</span>
+    hueLightId: "{{this.selectedLightId}}"
+    hueStatus: "{{this.selectedStatus}}"
+        </code></pre>
       </div>
     </mat-card>
     <label for="webhookClipboard" class="clipboard"></label>
@@ -92,7 +138,6 @@ import { environment } from "src/environments/environment";
     <textarea
       id="actionSnippetClipboard"
       #actionSnippetClipboard
-      [value]="actionSnippet"
       class="clipboard"
     ></textarea>
   `,
@@ -108,7 +153,10 @@ import { environment } from "src/environments/environment";
         color: var(--color);
       }
       mat-card > div {
-        z-index: 9999999999;
+        z-index: 1000;
+      }
+      mat-form-field {
+        margin: 20px 16px -12px;
       }
       img {
         width: 60px;
@@ -131,7 +179,7 @@ import { environment } from "src/environments/environment";
 
       kbd {
         border-radius: 3px;
-        color: #3292ff;
+        color: #ff4081;
         display: inline-block;
         line-height: 1;
         background: #f1f1f1;
@@ -139,19 +187,25 @@ import { environment } from "src/environments/environment";
       }
       pre {
         border: 1px solid #b4b4b4;
-        color: #3292ff;
+        color: #ff4081;
         padding: 6px 10px;
         background: #f1f1f1;
         overflow: auto;
         border-radius: 3px;
       }
-      button {
+      .revoke,
+      .authorize {
         position: absolute;
         left: 254px;
         top: 76px;
         background: white;
         margin: auto 0;
         width: 110px;
+      }
+      button.btn-try-it > span {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
       }
       .copy-to-clipboard {
         cursor: pointer;
@@ -187,10 +241,17 @@ import { environment } from "src/environments/environment";
   ]
 })
 export class HueAppInfoComponent {
-  progressBarColor: "primary" | "accent" = "primary";
+  lights: { value: string; viewValue: string }[] = [];
+  selectedLightId: string;
+  statuses: any[] = [
+    { value: "success", viewValue: "success" },
+    { value: "failure", viewValue: "failure" }
+  ];
+  selectedStatus: string;
+  pingingWebhook = false;
+  progressBarColor: "primary" | "accent" | "warn" = "primary";
   progressBarMode: "buffer" | "indeterminate" | "determinate" | "query" =
     "buffer";
-  actionSnippet = null;
   webhook = null;
   error = null;
   constructor(
@@ -217,6 +278,8 @@ export class HueAppInfoComponent {
   }
 
   async ngOnInit() {
+    this.selectedStatus = this.statuses[0].value;
+
     this.error = null;
     const { code, state, error } = this.getQueryParams();
 
@@ -227,32 +290,32 @@ export class HueAppInfoComponent {
     } else if (code && state) {
       this.progressBarMode = "indeterminate";
       this.progressBarColor = "primary";
-      const { webhook, status } = await this.post(environment.api.registerUrl, {
-        code,
-        state,
-        prod: environment.production
-      });
+      const { webhook, status, lights } = await this.post(
+        environment.api.registerUrl,
+        {
+          code,
+          state,
+          prod: environment.production
+        }
+      );
 
-      if (status === 404) {
-        // action not found
-        this.error = "Unknown session.";
-      } else if (status === 501) {
-        // action pending
-        this.error = "Pending session.";
-      } else if (status === 503) {
-        // action revoked
-        this.error = "Session revoked.";
+      if (status === 404 || status === 500) {
+        // account not found
+        this.error = "Unknown account.";
+      } else if (status === 410) {
+        // account revoked
+        this.error = "Account revoked.";
       } else {
+        // status === 200
+        this.lights = lights.map(lightMetadata => {
+          return {
+            value: lightMetadata._data.id,
+            viewValue: `${lightMetadata._data.name} (id: ${lightMetadata._data.id})`
+          };
+        });
+        this.selectedLightId = this.lights[0].value;
+
         this.webhook = webhook;
-        this.actionSnippet = `
-- name: Run Hue Action
-  uses: manekinekko/hue-action@v1.0
-  if: success()
-  with:
-    hueWebhook: \${{ secrets.HUEACTION_WEBHOOK }}
-    hueLightId: "1"
-    hueStatus: "success"
-      `;
         this.progressBarMode = "query";
         this.progressBarColor = "accent";
       }
@@ -283,9 +346,12 @@ export class HueAppInfoComponent {
     const { state } = this.getQueryParams();
     try {
       const res = await this.post(environment.api.revokeUrl, { state });
+      if (res.error) {
+        this.error = res.error;
+      }
       this.progressBarMode = "indeterminate";
       this.progressBarColor = "primary";
-      this.actionSnippet = null;
+      // this.webhook = null;
       this.webhook = null;
       this.window.history.pushState({}, "", "/");
     } catch (error) {
@@ -294,6 +360,25 @@ export class HueAppInfoComponent {
       this.error = error.toString();
       console.log(error);
     }
+  }
+
+  async tryIt() {
+    this.pingingWebhook = true;
+    this.progressBarMode = "buffer";
+    this.progressBarColor = "accent";
+    const res = await this.post(this.webhook, {
+      lightId: this.selectedLightId,
+      status: this.selectedStatus
+    });
+    if (res.error) {
+      this.error = res.error;
+      this.progressBarMode = "buffer";
+      this.progressBarColor = "warn";
+    } else {
+      this.progressBarMode = "query";
+      this.progressBarColor = "accent";
+    }
+    this.pingingWebhook = false;
   }
 
   async post(url: string, body: object) {
@@ -305,8 +390,11 @@ export class HueAppInfoComponent {
     ).json();
   }
 
-  copyToClipboard(el: HTMLTextAreaElement) {
-    el.select();
+  copyToClipboard(textarea: HTMLTextAreaElement, code?: HTMLElement) {
+    if (code) {
+      textarea.value = code.textContent;
+    }
+    textarea.select();
     document.execCommand("copy");
   }
 
