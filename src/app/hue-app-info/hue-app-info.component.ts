@@ -297,7 +297,7 @@ export class HueAppInfoComponent {
       this.error = "You need to grant permission to continue!";
       this.progressBarMode = "buffer";
       this.progressBarColor = "accent";
-    } else if (code && state) {
+    } else if (state) {
       this.progressBarMode = "indeterminate";
       this.progressBarColor = "primary";
       const { webhook, status, lights } = await this.post(
