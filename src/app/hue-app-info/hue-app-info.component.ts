@@ -323,7 +323,7 @@ export class HueAppInfoComponent {
             viewValue: `${lightMetadata._data.name} (id: ${lightMetadata._data.id})`
           };
         });
-        this.selectedLightId = this.lights[0].value;
+        this.selectedLightId = this.lights[0]?.value ?? "NO_LIGHT_FOUND";
 
         this.webhook = webhook;
         this.progressBarMode = "query";
