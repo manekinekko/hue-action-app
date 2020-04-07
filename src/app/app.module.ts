@@ -11,7 +11,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -28,6 +28,7 @@ import { environment } from "../environments/environment";
     MatProgressBarModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     })
