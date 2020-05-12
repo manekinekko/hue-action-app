@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
-    "build:swa": "ng build --prod --env=swa",
+    "build:swa": "ng build --prod --configuration=swa",
     "postbuild": "node scripts/lazy-styles.js && bash scripts/stamp-build.sh",
     "test": "ng test",
     "lint": "ng lint",
