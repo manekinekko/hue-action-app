@@ -383,7 +383,7 @@ export class HueAppInfoComponent {
     this.progressBarColor = "primary";
     try {
       const { auth } = await this.post(environment.api.authUrl, {
-        prod: environment.production,
+        target: environment.target,
       });
       document.location.href = auth;
     } catch (error) {
