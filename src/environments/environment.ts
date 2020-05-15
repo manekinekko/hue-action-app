@@ -4,11 +4,11 @@
 
 export const environment = {
   production: false,
-  target: "dev",
+  target: "prod",
   api: {
-    authUrl: "http://localhost:7071/auth",
-    registerUrl: "http://localhost:7071/register",
-    revokeUrl: "http://localhost:7071/revoke"
+    authUrl: "http://localhost:7071/api/auth",
+    registerUrl: "http://localhost:7071/api/register",
+    revokeUrl: "http://localhost:7071/api/revoke"
   }
 };
 
