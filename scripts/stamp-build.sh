@@ -11,7 +11,7 @@ else
 fi
 
 sha="$v"
-version="<a href='https:\/\/github.com\/manekinekko\/hue-action-app\/tree\/$sha'>#$sha<\/a>"
+version="<a href='https:\/\/github.com\/manekinekko\/hue-action-app\/commit\/$sha'>#$sha<\/a>"
 
 ## replease _BUILD_HASH_ with the current build number
 perl -i -pe "s/_BUILD_HASH_/$version/g" dist/hue-action-app/index.html
