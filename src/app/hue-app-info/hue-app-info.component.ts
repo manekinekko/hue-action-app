@@ -333,7 +333,7 @@ export class HueAppInfoComponent {
         {
           code,
           state,
-          prod: environment.production,
+          target: environment.target,
         }
       );
 
@@ -425,7 +425,7 @@ export class HueAppInfoComponent {
     const res = await this.post(this.webhook, {
       lightId: this.selectedLightId,
       status: this.selectedStatusLabel,
-      prod: environment.production,
+      target: environment.target,
     });
     if (res.error) {
       this.error = res.error;
